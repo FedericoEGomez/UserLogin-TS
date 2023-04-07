@@ -14,7 +14,7 @@ class ApiController {
     async register (req: Request, res: Response) {
         try {
             let salt = bcrypt.genSaltSync(10)
-            let hash = bcrypt.hashSync(req.body.pass, salt)
+            let hash = bcrypt.hashSync(req.body.password, salt)
             let usuario = {
                 name: req.body.name,
                 email: req.body.email,
@@ -24,6 +24,7 @@ class ApiController {
             await item.save()
             res.status(201).json({item})
         } catch (error) {
+            console.log(error)
             res.status(501).json({error})
         }
     }
@@ -46,11 +47,15 @@ class ApiController {
     }
     async loginToken (req: Request, res: Response) {
         try {
-            const usuario: any = await User.findOne({email: req.body.email})
-
+            
+            const usuario:any = await User.findOne({email: req.body.email})
+            console.log(usuario)
+            console.log(usuario.password)
+            console.log(usuario._id)
             if (usuario == null ) {
                 res.json({msg: "El mail o la contraseña es incorrecto"})     
             }
+            
             if (!bcrypt.compareSync(req.body.password, usuario.password)) {
                 res.json({msg: "El mail o la contraseña es incorrecto"}) 
             }

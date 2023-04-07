@@ -1,23 +1,20 @@
 import {Schema, model} from 'mongoose';
 
-const comida = new Schema({
-    nombre: {
+const schema = new Schema({
+    name: {
         type: String,
         required: true
     },
-    tipo:{
+    email:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    precio: {
-        type: Number,
-        required: true
-    },
-    descripcion: {
+    password:{
         type: String,
         required: true
     }
 })
 
-const User = model('User',comida);
+const User = model('User',schema);
 export default User;
