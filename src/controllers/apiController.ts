@@ -55,7 +55,6 @@ class ApiController {
                 res.json({msg: "El mail o la contraseña es incorrecto"}) 
             }
             const token = generarToken({id:usuario._id, email:usuario.email})
-            console.log(token)
             res.json({email: req.body.email, token})
         } catch (error) {
             console.log(error)
