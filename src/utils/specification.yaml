@@ -1,0 +1,175 @@
+paths:
+  /ver:
+    get:
+      tags:
+        - api ver 
+      description: Esta ruta muestra el listado de usuarios en la base de datos
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseListUser'
+  /registrar:
+    post: 
+      tags:
+        - api crear 
+      description: Esta ruta registra el usuario en la base de datos, posee distitnas validaciones como existencia en cada campo y a su vez la contraseña tiene una validacion con expresion regular para saber si posee 8 caracteres, un mayuscula, minusculas y algun caracter especial
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postRegister"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseUser'
+  /login:
+    post: 
+      tags:
+        - api crear 
+      description: Esta ruta devuelve un token con 4h de vida, se debe enviar el email y la contraseña para obtener el JWT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postLogin"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseLogin'
+  /editar/{id}:
+    put: 
+      tags:
+        - api editar  
+      description: Esta ruta crea un item de comida en la base de datos
+      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postRegister"
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/JWTtoken'
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseUser'
+        400:
+         description: bad request
+         content:
+           application/json:
+              schema:
+                  $ref: '#/components/schemas/badRequestInvalidId'
+  /eliminar/{id}:
+    delete: 
+      tags:
+        - api eliminar 
+      description: Esta ruta crea un item de comida en la base de datos 
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/JWTtoken'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/delereteUserResponse'
+        400:
+         description: bad request
+         content:
+           application/json:
+              schema:
+                  $ref: '#/components/schemas/badRequestInvalidId'
+components:
+  schemas:
+    postRegister:
+      properties:
+        name:
+          type: string
+          example: "ejemplo"
+        email: 
+          type: string
+          example: "ejemplo"
+        password:
+          type: string
+          example: "ejemplo"
+        repeatpassword:
+          type: string
+          example: "ejemplo"
+    postLogin:
+      properties:
+        email: 
+          type: string
+          example: "ejemplo"
+        password:
+          type: string
+          example: "ejemplo"
+    responseLogin:
+      properties:
+        email: 
+          type: string
+          example: "ejemplo"
+        token:
+          type: string
+          example: "ejemplo"
+    responseUser:
+      properties:
+        _id: 
+          type: string
+          example: 641a029a579f12da26c35882
+        name: 
+          type: string
+          example: "ejemplo"
+        email: 
+          type: string
+          example: "ejemplo"
+        password:
+          type: string
+          example: "ejemplo"
+        __v:
+          type: number
+          example: 0
+    delereteUserResponse: 
+      properties:
+        msg:
+          type: string
+          example: "objeto borrado ejemplo"
+        food:
+          $ref: '#/components/schemas/responseUser'
+    responseListUser:
+      properties:
+        users: 
+          items:
+            $ref: '#/components/schemas/responseUser'
+    badRequestInvalidId: 
+      properties:
+        msg:
+          type: string
+          example: "El id es invalido"
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Id del item en cuuestion
+      required: true
+      schema:
+        type: string
+    JWTtoken:
+      name: JWTtoken
+      in: header
+      required: true
+      schema:
+        type: string
